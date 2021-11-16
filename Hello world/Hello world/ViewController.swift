@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        emoji.isHidden = true
+       
         //guessmeButton.isEnabled = false
         
         gameLogik.startNewGame()
@@ -42,7 +42,11 @@ class ViewController: UIViewController {
         print("erraten: \(gameLogik.numberToGuess)")
     }
     
-
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        
+        return gameLogik.evaluate(string: texfield.text!) == 0
+    }
+    
     @IBAction func ontouchUpInside(_ sender: UIButton) {
         
      
@@ -59,7 +63,6 @@ class ViewController: UIViewController {
                 outputText = "Zu klein!"
             default:
                 outputText = "Erraten!"
-                emoji.isHidden = false
             }
         }
         
@@ -69,11 +72,16 @@ class ViewController: UIViewController {
         message.text = outputText
         
         gameLogik.numberOfGuesses += 1
-        trys.text = "Anzahl der Versuche: \(gameLogik.numberOfGuesses)"
+        
         
         	
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("test")
+        let resultViewController = segue.destination  as? ResultViewController
+        
+        resultViewController?.gamelogik = gameLogik
+    }
     
     
    
